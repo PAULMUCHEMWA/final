@@ -1,0 +1,76 @@
+{
+ "rules": {
+  "admins": {
+   ".read": "auth!=null && root.child('admins').child(auth.uid).val()===true",
+   "$uid": {
+    ".read": "auth!=null && auth.uid===$uid"
+   },
+   ".write": false
+  },
+  "users": {
+   ".read": "auth!=null && root.child('admins').child(auth.uid).val()===true",
+   "$uid": {
+    ".read": "auth!=null && auth.uid===$uid",
+    ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (auth.uid===$uid && !data.exists() && newData.child('level').val()==='owner' && root.child('companies').child(newData.child('cid').val()).child('profile').child('owner').val()===auth.uid) || ((root.child('users').child(auth.uid).child('level').val()==='owner' && root.child('users').child(auth.uid).child('active').val()===true) && (newData.exists() ? newData.child('cid').val()===root.child('users').child(auth.uid).child('cid').val() : data.child('cid').val()===root.child('users').child(auth.uid).child('cid').val()) && (!data.exists() || data.child('cid').val()===root.child('users').child(auth.uid).child('cid').val())))",
+    "last": {
+     ".write": "auth!=null && auth.uid===$uid"
+    }
+   }
+  },
+  "companies": {
+   ".read": "auth!=null && root.child('admins').child(auth.uid).val()===true",
+   ".write": "auth!=null && root.child('admins').child(auth.uid).val()===true",
+   "$cid": {
+    "profile": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || root.child('users').child(auth.uid).child('cid').val()===$cid)",
+     ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (!data.exists() && newData.child('owner').val()===auth.uid && newData.child('status').val()==='pending'))"
+    },
+    "vehicles": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('live').val()===1 || root.child('users').child(auth.uid).child('perm').child('live').val()===2) || (root.child('users').child(auth.uid).child('perm').child('dash').val()===1 || root.child('users').child(auth.uid).child('perm').child('dash').val()===2) || (root.child('users').child(auth.uid).child('perm').child('ast').val()===1 || root.child('users').child(auth.uid).child('perm').child('ast').val()===2) || (root.child('users').child(auth.uid).child('perm').child('veh').val()===1 || root.child('users').child(auth.uid).child('perm').child('veh').val()===2) || (root.child('users').child(auth.uid).child('perm').child('trp').val()===1 || root.child('users').child(auth.uid).child('perm').child('trp').val()===2) || (root.child('users').child(auth.uid).child('perm').child('drp').val()===1 || root.child('users').child(auth.uid).child('perm').child('drp').val()===2) || (root.child('users').child(auth.uid).child('perm').child('flt').val()===1 || root.child('users').child(auth.uid).child('perm').child('flt').val()===2))))",
+     ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('flt').val()===2))))"
+    },
+    "trips": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('live').val()===1 || root.child('users').child(auth.uid).child('perm').child('live').val()===2) || (root.child('users').child(auth.uid).child('perm').child('dash').val()===1 || root.child('users').child(auth.uid).child('perm').child('dash').val()===2) || (root.child('users').child(auth.uid).child('perm').child('ast').val()===1 || root.child('users').child(auth.uid).child('perm').child('ast').val()===2) || (root.child('users').child(auth.uid).child('perm').child('veh').val()===1 || root.child('users').child(auth.uid).child('perm').child('veh').val()===2) || (root.child('users').child(auth.uid).child('perm').child('trp').val()===1 || root.child('users').child(auth.uid).child('perm').child('trp').val()===2) || (root.child('users').child(auth.uid).child('perm').child('drp').val()===1 || root.child('users').child(auth.uid).child('perm').child('drp').val()===2) || (root.child('users').child(auth.uid).child('perm').child('flt').val()===1 || root.child('users').child(auth.uid).child('perm').child('flt').val()===2))))",
+     ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('flt').val()===2))))"
+    },
+    "imports": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('live').val()===1 || root.child('users').child(auth.uid).child('perm').child('live').val()===2) || (root.child('users').child(auth.uid).child('perm').child('dash').val()===1 || root.child('users').child(auth.uid).child('perm').child('dash').val()===2) || (root.child('users').child(auth.uid).child('perm').child('ast').val()===1 || root.child('users').child(auth.uid).child('perm').child('ast').val()===2) || (root.child('users').child(auth.uid).child('perm').child('veh').val()===1 || root.child('users').child(auth.uid).child('perm').child('veh').val()===2) || (root.child('users').child(auth.uid).child('perm').child('trp').val()===1 || root.child('users').child(auth.uid).child('perm').child('trp').val()===2) || (root.child('users').child(auth.uid).child('perm').child('drp').val()===1 || root.child('users').child(auth.uid).child('perm').child('drp').val()===2) || (root.child('users').child(auth.uid).child('perm').child('flt').val()===1 || root.child('users').child(auth.uid).child('perm').child('flt').val()===2))))",
+     ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('flt').val()===2))))"
+    },
+    "rates": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('live').val()===1 || root.child('users').child(auth.uid).child('perm').child('live').val()===2) || (root.child('users').child(auth.uid).child('perm').child('dash').val()===1 || root.child('users').child(auth.uid).child('perm').child('dash').val()===2) || (root.child('users').child(auth.uid).child('perm').child('ast').val()===1 || root.child('users').child(auth.uid).child('perm').child('ast').val()===2) || (root.child('users').child(auth.uid).child('perm').child('veh').val()===1 || root.child('users').child(auth.uid).child('perm').child('veh').val()===2) || (root.child('users').child(auth.uid).child('perm').child('trp').val()===1 || root.child('users').child(auth.uid).child('perm').child('trp').val()===2) || (root.child('users').child(auth.uid).child('perm').child('drp').val()===1 || root.child('users').child(auth.uid).child('perm').child('drp').val()===2) || (root.child('users').child(auth.uid).child('perm').child('rat').val()===1 || root.child('users').child(auth.uid).child('perm').child('rat').val()===2))))",
+     ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('rat').val()===2))))"
+    },
+    "ledger": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('led').val()===1 || root.child('users').child(auth.uid).child('perm').child('led').val()===2))))",
+     ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('led').val()===2))))"
+    },
+    "drivers": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('drv').val()===1 || root.child('users').child(auth.uid).child('perm').child('drv').val()===2))))",
+     ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('drv').val()===2))))"
+    },
+    "driverDocs": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('drv').val()===1 || root.child('users').child(auth.uid).child('perm').child('drv').val()===2))))",
+     ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('drv').val()===2))))"
+    },
+    "staff": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('stf').val()===2))))",
+     ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && ((root.child('users').child(auth.uid).child('perm').child('stf').val()===2))))"
+    },
+    "profiles": {
+     ".read": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active' && (root.child('users').child(auth.uid).child('perm').child('drv').val()===1 || root.child('users').child(auth.uid).child('perm').child('drv').val()===2)))",
+     "$uid": {
+      ".read": "auth!=null && auth.uid===$uid",
+      ".write": "auth!=null && (root.child('admins').child(auth.uid).val()===true || (auth.uid===$uid && root.child('users').child(auth.uid).child('cid').val()===$cid && root.child('users').child(auth.uid).child('active').val()===true && root.child('companies').child($cid).child('profile').child('status').val()==='active'))"
+     }
+    }
+   }
+  },
+  "config": {
+   "levels": {
+    ".read": "auth!=null",
+    ".write": "auth!=null && root.child('admins').child(auth.uid).val()===true"
+   }
+  }
+ }
+}
